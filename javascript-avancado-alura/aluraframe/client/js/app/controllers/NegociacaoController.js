@@ -3,7 +3,7 @@ class NegociacaoController {
     constructor() {
         
         let $ = document.querySelector.bind(document);
-        
+
         this._inputData = $('#data');
         this._inputQuantidade = $('#quantidade');
         this._inputValor = $('#valor');
@@ -27,6 +27,21 @@ class NegociacaoController {
         this._listaNegocioacoes.adiciona(this._criaNegociaciao());
         this._mensagem.texto = "Negociação adicionada com sucesso.";
         this._limpaFormulario();
+    }
+
+    importaNegociacoes(){
+        let service = new NegociacaoService();
+
+        service.obterNegociacoesDaSemana((err, negociacoes) => {
+            if(err){
+                this._mensagem.texto = err;
+                return;
+            }
+
+            negociacoes.forEach(negociacao => this._listaNegocioacoes.adiciona(negociacao));
+
+            this._mensagem.texto = "Negociacoes importadas com sucesso.";
+        });
     }
 
     apaga(){
